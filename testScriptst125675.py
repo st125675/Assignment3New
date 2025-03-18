@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 import pandas as pd
-from sklearn.exceptions import ValueError  # Import ValueError
+from sklearn.exceptions import ConvergenceWarning, UndefinedMetricWarning  # Import ValueError
 
 class CustomLogisticRegression:
     """
