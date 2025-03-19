@@ -2,51 +2,55 @@ on:
   push:
     branches:
       - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Print working directory
         run: pwd
+
       - name: Clear pip cache
         run: |
           rm -rf ~/.cache/pip
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.9"
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
       - name: Run unit tests
         run: |
           python testScriptst125675.py
+
       - name: Build Docker image
         run: |
-          docker build -t your-docker-username/your-image-name:latest .
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/your-image-name:latest .
+
       - name: Log in to Docker Hub (or your registry)
-        run: >
-          echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u ${{
-          secrets.DOCKER_HUB_USERNAME }} --password-stdin
+        run: |
+          echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+
       - name: Push Docker image
         run: |
-          docker push your-docker-username/your-image-name:latest
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/your-image-name:latest
+
       - name: Deploy to VM
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
-          script: >
-            docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{
-            secrets.DOCKER_HUB_PASSWORD }}
-
-            docker pull your-docker-username/your-image-name:latest
-
+          script: |
+            docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" -p "${{ secrets.DOCKER_HUB_PASSWORD }}"
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/your-image-name:latest
             docker stop my-container || true
-
             docker rm my-container || true
-
-            docker run -d --name my-container -p 8000:8000 your-docker-username/your-image-name:latest
+            docker run -d --name my-container -p 8000:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/your-image-name:latest
