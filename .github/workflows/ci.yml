@@ -39,8 +39,7 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/assignment3-app:latest
-
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/assignment3-app:latest .
       - name: Deploy to VM
         uses: appleboy/ssh-action@v0.1.10
         with:
