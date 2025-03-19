@@ -39,7 +39,7 @@ jobs:
 
       - name: Push Docker Image
         run: |
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/assignment3-app:latest
+          docker push assignment3-app:latest
 
   deploy:
     needs: build
