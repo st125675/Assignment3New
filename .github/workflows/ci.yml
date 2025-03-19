@@ -25,7 +25,7 @@ jobs:
           python testScriptst125675.py
       - name: Build Docker image
         run: |
-          docker build -t your-docker-username/your-image-name:latest .
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/assignment3-app:latest .
       - name: Log in to Docker Hub (or your registry)
         run: >
           echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u ${{
