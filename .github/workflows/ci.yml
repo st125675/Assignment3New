@@ -33,10 +33,6 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/assignment3-app:latest .
-<<<<<<< HEAD
-=======
-
->>>>>>> 6cc128f8b9c9d190a63e660986055eed4daf15d7
       - name: Log in to Docker Hub (or your registry)
         run: |
           echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
